@@ -1,0 +1,6 @@
+---
+# defaults file for prometheus_installer
+
+  prom_ver:
+    2.20.0
+

@@ -1,0 +1,35 @@
+---
+# tasks file for prometheus_installer
+
+  - name: Prerequisites installation
+    apt:
+      pkg:
+        - apt-transport-https
+        - software-properties-common
+        - wget
+        - adduser
+        - libfontconfig1
+      state: present
+      update_cache: yes
+
+  - name: Prometheus download archive
+    get_url:
+      url: "https://github.com/prometheus/prometheus/releases/download/v{{ prom_ver }}/prometheus-{{ prom_ver }}.linux-amd64.tar.gz"
+      dest: "/tmp/prometheus-{{ prom_ver }}.linux-amd64.tar.gz"
+
+  - name: Prometheus unpack archive
+    unarchive:
+      src: "/tmp/prometheus-{{ prom_ver }}.linux-amd64.tar.gz"
+      dest: "/tmp"
+      remote_src: yes
+      creates: "/tmp/prometheus-{{ prom_ver }}.linux-amd64/prometheus"
+
+  - name: Prometheus copy files to working directories
+    copy:
+      src: "/tmp/prometheus-{{ prom_ver }}.linux-amd64/"
+      dest: /usr/local/bin/prometheus
+      mode: 0644
+      owner: root
+      group: root
+      remote_src: yes
+
